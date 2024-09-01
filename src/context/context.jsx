@@ -1,4 +1,5 @@
-import { createContext, useState } from "react";
+import React, { createContext, useState } from "react";
+import runchat from "../config/runchat";
 
 export const Context = createContext();
 
@@ -11,7 +12,7 @@ const ContextProvider = (props) => {
   const [resultData, setResultData] = useState("");
 
   const delayPara = (index, nextWord) => {
-    setTimeout(function () {
+    setTimeout(() => {
       setResultData((prev) => prev + nextWord);
     }, 75 * index);
   };

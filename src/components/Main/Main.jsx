@@ -13,6 +13,7 @@ const Main = () => {
     setInput,
     input,
   } = useContext(Context);
+
   return (
     <div className="main">
       <div className="nav">
@@ -62,7 +63,7 @@ const Main = () => {
                   <hr />
                 </div>
               ) : (
-                <p dangerouslySetInnerHTML={{ _html: resultData }}></p>
+                <p dangerouslySetInnerHTML={{ __html: resultData }}></p>
               )}
             </div>
           </div>
@@ -80,7 +81,11 @@ const Main = () => {
               <img src={assets.gallery_icon} alt="" />
               <img src={assets.mic_icon} alt="" />
               {input ? (
-                <img onClick={() => onSent()} src={assets.send_icon} alt="" />
+                <img
+                  onClick={() => onSent(input)}
+                  src={assets.send_icon}
+                  alt=""
+                />
               ) : null}
             </div>
           </div>
