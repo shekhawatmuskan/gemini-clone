@@ -120,7 +120,7 @@
 }
 
 .result {
-  padding: 0px 5%;
+  padding: 0% 5%;
   max-height: 70vh;
   overflow-y: scroll;
 }
