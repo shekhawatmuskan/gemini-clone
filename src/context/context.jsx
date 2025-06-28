@@ -61,7 +61,7 @@ const ContextProvider = (props) => {
     onSent,
     setRecentPrompt,
     recentPrompt,
-    showResult,
+    showResult, 
     loading,
     resultData,
     input,
