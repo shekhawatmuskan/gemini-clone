@@ -17,7 +17,7 @@ This project is a simple and clean clone of the Google Gemini chatbot. It allows
 
 ### Core Features
 
-- **Chat Interface:**Simple and interactive chat layout.
+- **Chat Interface:** Simple and interactive chat layout.
 - **Typing Animation:** Simulated typing effect for a natural feel.
 - **Gemini API Integration:** Uses real AI responses from Google’s Gemini.
 
