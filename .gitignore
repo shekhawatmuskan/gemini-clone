@@ -28,3 +28,6 @@ dist-ssr
 .vscode/
 .idea/
 *.log
+.env.example
+.env
+

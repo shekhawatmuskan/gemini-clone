@@ -26,3 +26,27 @@ This project is a simple and clean clone of the Google Gemini chatbot. It allows
 - Built with **React.js (Vite)**
 - Responsive design with CSS styling
 - Sidebar for recent conversations
+
+## Setup & Run
+
+1. Get a Gemini API key from Google AI Studio.
+2. Create a `.env` file in the project root:
+
+```bash
+VITE_GEMINI_API_KEY=YOUR_API_KEY
+```
+
+Optionally set a model (default is `gemini-2.5-flash`):
+
+```bash
+VITE_GEMINI_MODEL=gemini-2.5-flash
+```
+
+3. Install and run:
+
+```bash
+npm install
+npm run dev
+```
+
+Then open `http://localhost:5173/`.
