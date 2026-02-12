@@ -26,33 +26,45 @@ const ContextProvider = (props) => {
     setResultData("");
     setLoading(true);
     setShowResult(true);
-    let response;
-    if (prompt !== undefined) {
-      response = await runchat(prompt);
-      setRecentPrompt(prompt);
-    } else {
-      setPrevPrompts((prev) => [...prev, input]);
-      setRecentPrompt(input);
-      response = await runchat(input);
-    }
-
-    let responseArray = response.split("**");
-    let newResponse = "";
-    for (let i = 0; i < responseArray.length; i++) {
-      if (i === 0 || i % 2 !== 1) {
-        newResponse += responseArray[i];
+    
+    try {
+      let response;
+      if (prompt !== undefined) {
+        response = await runchat(prompt);
+        setRecentPrompt(prompt);
       } else {
-        newResponse += "<b>" + responseArray[i] + "</b>";
+        setPrevPrompts((prev) => [...prev, input]);
+        setRecentPrompt(input);
+        response = await runchat(input);
       }
+
+      let responseArray = response.split("**");
+      let newResponse = "";
+      for (let i = 0; i < responseArray.length; i++) {
+        if (i === 0 || i % 2 !== 1) {
+          newResponse += responseArray[i];
+        } else {
+          newResponse += "<b>" + responseArray[i] + "</b>";
+        }
+      }
+      let newResponse2 = newResponse.split("*").join("</br>");
+      let newResponseArray = newResponse2.split(" ");
+      for (let i = 0; i < newResponseArray.length; i++) {
+        const nextWord = newResponseArray[i];
+        delayPara(i, nextWord + " ");
+      }
+    } catch (error) {
+      if (error?.name === "QuotaExceededError" || error?.message?.includes("quota") || error?.message?.includes("429")) {
+        const errorMsg = error?.message || "API quota exceeded. Please wait a moment and try again.";
+        setResultData(`⚠️ ${errorMsg}`);
+      } else {
+        const errorMsg = error?.message || "An error occurred. Please try again.";
+        setResultData(`❌ Error: ${errorMsg}`);
+      }
+    } finally {
+      setLoading(false);
+      setInput("");
     }
-    let newResponse2 = newResponse.split("*").join("</br>");
-    let newResponseArray = newResponse2.split(" ");
-    for (let i = 0; i < newResponseArray.length; i++) {
-      const nextWord = newResponseArray[i];
-      delayPara(i, nextWord + " ");
-    }
-    setLoading(false);
-    setInput("");
   };
 
   const contextValue = {

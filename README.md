@@ -32,15 +32,32 @@ This project is a simple and clean clone of the Google Gemini chatbot. It allows
 1. Get a Gemini API key from Google AI Studio.
 2. Create a `.env` file in the project root:
 
+### Basic Setup (Single API Key)
+
 ```bash
 VITE_GEMINI_API_KEY=YOUR_API_KEY
 ```
 
-Optionally set a model (default is `gemini-2.5-flash`):
+### Advanced Setup (Multiple API Keys for Free Tier)
+
+To maximize free tier usage and avoid quota errors, you can use **multiple API keys** (each from a different Google Cloud project). Each API key has its own 20 requests/day quota.
 
 ```bash
-VITE_GEMINI_MODEL=gemini-2.5-flash
+# Multiple API keys separated by commas
+VITE_GEMINI_API_KEY=KEY1,KEY2,KEY3
+
+# Optional: Specify models (each model has separate quota)
+# Default: gemini-2.5-flash, gemini-1.5-flash, gemini-1.5-pro, gemini-pro
+VITE_GEMINI_MODEL=gemini-2.5-flash,gemini-1.5-flash
 ```
+
+**How it works:**
+- ✅ **Automatic Fallback**: If one API key/model hits quota, it automatically tries the next one
+- ✅ **Response Caching**: Repeated questions use cached responses (no API calls)
+- ✅ **Smart Rotation**: Tracks exhausted combinations and skips them
+- ✅ **Multiple Models**: Each Gemini model has its own 20/day quota
+
+**Example with 2 API keys × 4 models = up to 160 requests/day on free tier!**
 
 3. Install and run:
 
