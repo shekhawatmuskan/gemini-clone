@@ -1,6 +1,5 @@
 <div align="center">
 
-
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=200&section=header&text=GEMINI%20CLONE&fontSize=80&fontAlignY=35&animation=twinkling&fontColor=fff"/>
 
 <br/>
@@ -30,11 +29,19 @@ A modern, sleek Gemini AI chat interface built with React and Vite. This clone b
 
 <div align="center">
 
-
 ### 📸 Explore The Interface
 
 <table>
 <tr>
+
+<td align="center" width="50%">
+<img src="src/assets/landing-page.png" width="100%" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<br/><br/>
+<b>Landing Page</b>
+<br/>
+<sub>Try Suggestions to Generate Response</sub>
+</td>
+
 <td align="center" width="50%">
 <img src="src/assets/planning.png" width="100%" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 <br/><br/>
@@ -42,13 +49,7 @@ A modern, sleek Gemini AI chat interface built with React and Vite. This clone b
 <br/>
 <sub>AI-generated to-do lists that actually work</sub>
 </td>
-<td align="center" width="50%">
-<img src="src/assets/receipe.png" width="100%" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
-<br/><br/>
-<b>Recipe Mastery</b>
-<br/>
-<sub>From ingredients to perfection</sub>
-</td>
+
 </tr>
 </table>
 
