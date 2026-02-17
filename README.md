@@ -1,10 +1,10 @@
 <div align="center">
 
-<!-- Header with gradient text effect -->
+
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=200&section=header&text=GEMINI%20CLONE&fontSize=80&fontAlignY=35&animation=twinkling&fontColor=fff"/>
 
 <br/>
-<!-- Stylish tech stack badges -->
+
 <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
 <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" />
 <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
@@ -30,7 +30,6 @@ A modern, sleek Gemini AI chat interface built with React and Vite. This clone b
 
 <div align="center">
 
-<!-- Creative screenshot presentation -->
 
 ### 📸 Explore The Interface
 

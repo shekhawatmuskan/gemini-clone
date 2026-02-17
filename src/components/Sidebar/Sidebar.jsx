@@ -3,59 +3,75 @@ import "./Sidebar.css";
 import { assets } from "../../assets/assets";
 import { Context } from "../../context/context";
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen = false, onClose = () => { } }) => {
   const [extended, setExtended] = useState(false);
-  const { onSent, prevPrompts, setRecentPrompt, newChat } = useContext(Context);
+  const { chats, activeChatId, setActiveChatId, newChat } = useContext(Context);
 
-  const loadPrompt = async (prompt) => {
-    setRecentPrompt(prompt);
-    await onSent(prompt);
+  const handleNewChat = () => {
+    newChat();
+    onClose();
   };
 
   return (
-    <div className="sidebar">
-      <div className="top">
-        <img
-          onClick={() => setExtended((prev) => !prev)}
-          className="menu"
-          src={assets.menu_icon}
-          alt=""
-        />
-        <div onClick={() => newChat()} className="new-chat">
-          <img src={assets.plus_icon} alt="" />
-          {extended ? <p>New Chat</p> : null}
-        </div>
-        {extended ? (
-          <div className="recent">
-            <p className="recent-title">Recent</p>
-            {prevPrompts.map((item, index) => (
-              <div
-                key={`${item}-${index}`}
-                onClick={() => loadPrompt(item)}
-                className="recent-entry"
-              >
-                <img src={assets.message_icon} alt="" />
-                <p>{item.slice(0, 18)}...</p>
-              </div>
-            ))}
+    <>
+      <div
+        className={`sidebar-overlay ${isOpen ? "open" : ""}`}
+        onClick={onClose}
+        aria-hidden={!isOpen}
+      />
+      <div className={`sidebar ${isOpen ? "open" : ""}`}>
+        <div className="top">
+          <img
+            onClick={() => {
+              if (isOpen) {
+                onClose();
+              } else {
+                setExtended((prev) => !prev);
+              }
+            }}
+            className="menu"
+            src={assets.menu_icon}
+            alt="Toggle sidebar"
+          />
+          <div onClick={handleNewChat} className="new-chat">
+            <img src={assets.plus_icon} alt="" />
+            {extended ? <p>New Chat</p> : null}
           </div>
-        ) : null}
+          {extended ? (
+            <div className="recent">
+              <p className="recent-title">Chats</p>
+              {chats.map((chat) => (
+                <div
+                  key={chat.id}
+                  onClick={() => {
+                    setActiveChatId(chat.id);
+                    onClose();
+                  }}
+                  className={`recent-entry ${chat.id === activeChatId ? "active" : ""}`}
+                >
+                  <img src={assets.message_icon} alt="" />
+                  <p>{(chat.title || "New chat").slice(0, 22)}...</p>
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </div>
+        <div className="bottom">
+          <div className="bottom-item recent-entry">
+            <img src={assets.question_icon} alt="" />
+            {extended ? <p>Help</p> : null}
+          </div>
+          <div className="bottom-item recent-entry">
+            <img src={assets.history_icon} alt="" />
+            {extended ? <p>Activity</p> : null}
+          </div>
+          <div className="bottom-item recent-entry">
+            <img src={assets.setting_icon} alt="" />
+            {extended ? <p>Settings</p> : null}
+          </div>
+        </div>
       </div>
-      <div className="bottom">
-        <div className="bottom-item recent-entry">
-          <img src={assets.question_icon} alt="" />
-          {extended ? <p>Help</p> : null}
-        </div>
-        <div className="bottom-item recent-entry">
-          <img src={assets.history_icon} alt="" />
-          {extended ? <p>Activity</p> : null}
-        </div>
-        <div className="bottom-item recent-entry">
-          <img src={assets.setting_icon} alt="" />
-          {extended ? <p>Settings</p> : null}
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 

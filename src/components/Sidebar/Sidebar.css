@@ -7,6 +7,10 @@
   padding: 25px 15px;
 }
 
+.sidebar-overlay {
+  display: none;
+}
+
 .sidebar img {
   width: 20px;
 }
@@ -61,13 +65,45 @@
   flex-direction: column;
 }
 
-.sidebar.bottom-item {
+.sidebar .bottom-item {
   padding-right: 10px;
   cursor: pointer;
 }
 
+.sidebar .recent-entry.active {
+  background-color: #e2e6eb;
+}
+
 @media (max-width: 600px) {
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease;
+    z-index: 999;
+  }
+
+  .sidebar-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
   .sidebar {
-    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(85vw, 320px);
+    transform: translateX(-100%);
+    transition: transform 200ms ease;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
   }
 }

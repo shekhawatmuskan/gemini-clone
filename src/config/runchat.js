@@ -30,12 +30,21 @@ const CACHE_DURATION = 24 * 60 * 60 * 1000;
 
 const exhaustedCombinations = new Set();
 
-function getCacheKey(prompt) {
-  return prompt.toLowerCase().trim();
+function getCacheKey(prompt, historyMessages = []) {
+  const normalizedPrompt = (prompt || "").toLowerCase().trim();
+  const normalizedHistory = Array.isArray(historyMessages)
+    ? historyMessages
+        .slice(-12)
+        .map((m) => ({
+          r: m?.role === "assistant" ? "a" : "u",
+          c: (m?.content || "").toLowerCase().trim(),
+        }))
+    : [];
+  return JSON.stringify({ p: normalizedPrompt, h: normalizedHistory });
 }
 
-function getCachedResponse(prompt) {
-  const key = getCacheKey(prompt);
+function getCachedResponse(prompt, historyMessages) {
+  const key = getCacheKey(prompt, historyMessages);
   const cached = responseCache.get(key);
   if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
     return cached.response;
@@ -43,8 +52,8 @@ function getCachedResponse(prompt) {
   return null;
 }
 
-function setCachedResponse(prompt, response) {
-  const key = getCacheKey(prompt);
+function setCachedResponse(prompt, historyMessages, response) {
+  const key = getCacheKey(prompt, historyMessages);
   responseCache.set(key, {
     response,
     timestamp: Date.now(),
@@ -55,7 +64,7 @@ function getCombinationKey(apiKey, model) {
   return `${apiKey.substring(0, 10)}_${model}`;
 }
 
-async function runchat(prompt) {
+async function runchat(prompt, historyMessages = []) {
   const apiKeys = getApiKeys();
   if (apiKeys.length === 0) {
     throw new Error(
@@ -66,28 +75,43 @@ async function runchat(prompt) {
   const textPrompt = prompt?.trim();
   if (!textPrompt) return "";
 
-  const cachedResponse = getCachedResponse(textPrompt);
+  const cachedResponse = getCachedResponse(textPrompt, historyMessages);
   if (cachedResponse) {
     console.log("✅ Using cached response");
     return cachedResponse;
   }
 
   const models = getModels();
+  const historyText = Array.isArray(historyMessages) && historyMessages.length
+    ? historyMessages
+        .slice(-12)
+        .map((m) => {
+          const role = m?.role === "assistant" ? "Assistant" : "User";
+          const content = (m?.content || "").trim();
+          return `${role}: ${content}`;
+        })
+        .join("\n")
+    : "(none)";
+
   const finalPrompt = `
 You are a helpful and concise AI assistant.
 
 Your goal is to provide answers that are **easy to read and understand**.
+Return your answer in GitHub-flavored Markdown.
 
 Formatting Rules:
 1. **Use Bullet Points**: Break down information into clean bulleted lists.
 2. **Avoid Large Headers**: Do NOT use markdown headers like #, ##, or ###. Use **bold text** for emphasis instead.
 3. **Keep it Simple**: Use simple language and short paragraphs.
-4. **Code Blocks**: If explaining code, wrap it in code blocks.
+4. **Code Blocks**: If explaining code, wrap it in triple-backtick code blocks.
 
 Example Style:
 - **Concept**: Explanation
 - **Usage**: Explanation
 - **Key Benefit**: Explanation
+
+Conversation so far (most recent last):
+${historyText}
 
 User Question:
 ${textPrompt}
@@ -117,7 +141,7 @@ ${textPrompt}
         const result = await model.generateContent(finalPrompt);
         const responseText = result.response.text();
 
-        setCachedResponse(textPrompt, responseText);
+        setCachedResponse(textPrompt, historyMessages, responseText);
         console.log(`✅ Success with ${modelName}`);
 
         return responseText;
